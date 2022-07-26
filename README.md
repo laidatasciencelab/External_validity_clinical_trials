@@ -1,1 +1,4 @@
-# External_validity_clinical_trials
+# About the project
+
+# Methodology
+
