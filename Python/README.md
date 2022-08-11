@@ -14,4 +14,6 @@ The input file is a csv file generated from our MySql database of RCTs, with the
 
 Each characteristic has been manually added as an individual column prior to processing in Python. Example:
 
-| id | name | type | clinical_study | condition_ | brief_title | phase | study_type | study_pop | criteria | gender | minimum_age | maximum_age | healthy_volunteers | medication_use | cardiovascular clinical speciality |
+| id | name | type | clinical_study | condition_ | brief_title | phase | study_type | study_pop | criteria | gender | minimum_age | maximum_age | healthy_volunteers | medication_use | cardiovascular clinical speciality | ... |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
