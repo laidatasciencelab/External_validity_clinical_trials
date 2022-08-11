@@ -1,4 +1,18 @@
-# About the project
+# Comparing clinical trial population representativeness to real-world populations: an external validity analysis encompassing 43,895 trials and 5.6M individuals across 989 unique drugs and 286 conditions
 
-# Methodology
+## How to cite this work
+> Tan YY, Papez V, Chang WH, Mueller SH, Denaxas S, Lai AG. "Comparing clinical trial population representativeness to real-world populations: an external validity analysis encompassing 43,895 trials and 5.6M individuals across 989 unique drugs and 286 conditions." Lancet Healthy Longevity *insert vol*.*insert issue* *(insert year)*. *insert doi*
 
+## About the project
+
+Randomised controlled trials (RCTs) inform prescription guidelines, but stringent eligibility criteria exclude individuals with vulnerable characteristics which we define as comorbidities, concomitant medication use and vulnerabilities due to age. Poor external validity can result in inadequate treatment decision information. Our first aim was to quantify the extent of exclusion of individuals with vulnerable characteristics from RCTs for all prescription drugs. Our second aim was to quantify the prevalence of individuals with vulnerable characteristics from population electronic health records (EHRs) who are actively prescribed such drugs. In tandem, these two aims will allow us to assess the representativeness between RCT and real-world populations and identify vulnerable populations potentially at risk for inadequate treatment decision information. When a vulnerable population is highly excluded from RCTs but has a high prevalence of individuals actively being prescribed the same medication, there is likely to be a gap in treatment decision information. Our third aim was to investigate the utility of real-world evidence (RWE) in contributing towards quantifying missing treatment risk or benefit through an observational study. 
+
+## Methodology
+
+We extracted RCTs from clinicaltrials.gov from its inception to 28/04/2021 and primary care records from Clinical Practice Research Datalink (CPRD) Gold database up to 31/12/2020. We referred to the British National Formulary to classify prescription drugs into drug categories. We conducted descriptive analyses and quantified RCT exclusion and prevalence of individuals with vulnerable characteristics for comparison to identify populations lacking treatment decision information. Exclusion and prevalence were assessed separately for different age groups, individual clinical specialities and for quantities of concomitant conditions by clinical specialities, where multimorbidity is defined as having 2 or more clinical specialties, and medications prescribed, where polypharmacy is defined as having 5 or more medications prescribed. Multimorbidity and polypharmacy trends for separate age groups in each drug category were analysed to identify population trends. Population trends of individuals with multimorbidity or polypharmacy were assessed separately by the age groups. We conducted an observational cohort study to validate the utility of RWE in contributing towards quantifying treatment risk or benefit between dementia patients on anti-dementia drugs with and without a contraindicated clinical speciality. To do so, we identified the clinical specialities that anti-dementia drug RCTs highly excluded yet had corresponding high prevalence in the real-world population, forming the groups with highest risk of lacking treatment decision information. Cox regression was utilised to assess if the risk of mortality outcomes between both groups.
+
+Quantification of RCT exclusion was undertaken in Python 3.8.10, and quantification of prevalence and further analyses were undertaken in R 3.6.2.
+
+## Ethical approval 
+
+Information governance approval was obtained from the Medicines Healthcare Regulatory Authority (UK) Independent Scientific Advisory Committee (20_000204) Clinical Practice Research Datalink (CPRD). 
