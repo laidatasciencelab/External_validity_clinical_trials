@@ -9,6 +9,8 @@ Python version 3.8.10
 The input file is a csv file generated from our MySql database of RCTs, with the following template:
 
 | id | name | type | clinical_study | condition_ | brief_title | phase | study_type | study_pop | criteria | gender | minimum_age | maximum_age | healthy_volunteers |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| id | name | type | clinical_study | condition_ | brief_title | phase | study_type | study_pop | criteria | gender | minimum_age | maximum_age | healthy_volunteers |
 
 Each characteristic has been manually added as an individual column prior to processing in Python. Example:
 
