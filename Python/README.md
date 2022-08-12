@@ -90,6 +90,8 @@ for k, v in age_dict.items():
         v = 0 
         age_dict[k] = v  
 
+print(age_dict)
+
 for file in os.listdir(qc):
     print(file)
     df = pd.read_csv(qc + "/"+ file)
@@ -101,4 +103,42 @@ for file in os.listdir(qc):
     df = df.drop(["minimum_age_QCed", "maximum_age_QCed"], axis = 1)
 
     df.to_csv(qc + "/"+ file, index=False)
+```
+
+## Clinical speciality mapping file 
+
+The mapping file is a csv file containing mapped condition phenotypes to a clinical speciality with the following template:
+
+
+
+The input file is a csv file generated from our MySql database of RCTs, with the following template:
+
+| condition | clinical_speciality_abbreviation | clinical_speciality |
+| ------------- | ------------- | ------------- | 
+|  |  |  |
+
+## Clinical speciality mapping dictionary 
+
+```python
+clin_spec_mapping = pd.read_csv("clin_spec_mapping.csv", encoding = "latin-1")
+speciality_list = clin_spec_mapping["clinical_speciality"].tolist()
+speciality_dict = {k:[] for k in list(set(speciality_list))}
+
+for k, v in speciality_dict.items():
+    for row, index in enumerate(clin_spec_mapping.itertuples()):
+        if str(k) == str(clin_spec_mapping.iloc[row,2]):
+            v.append(str(clin_spec_mapping.iloc[row,0]))
+
+print(speciality_dict)
+
+# adding further medical terms to clinical specialities (example)
+clin_spec_A = ["term_1", "term_2", "term_3"]
+clin_spec_B = ["term_4", "term_5", "term_6"]
+clin_spec_C = ["term_7", "term_8", "term_9"]
+
+manual_value = [clin_spec_A, clin_spec_B, clin_spec_C]
+manual_keys = ["clin_spec_A", "clin_spec_B", "clin_spec_C"]
+
+alt_dict = {manual_keys[i]:manual_value[i] for i in range(len(manual_keys))}
+speciality_dict = {key: specialty_dict[key] + alt_dict[key] if key in alt_dict.keys() else value for key, value in specialty_dict.items()}
 ```
