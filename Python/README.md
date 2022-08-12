@@ -32,7 +32,7 @@ import os
 ```python
 for file in os.listdir(working_directory):
     print(file)
-    df = pd.read_csv(working_directory + "/"+ file)
+    df = pd.read_csv(working_directory + "/"+ file, encoding = "latin-1")
     drug_cat_name = file.replace(".csv","")
 
     df = df.drop_duplicates(subset=["clinical_study"], keep = "first")
@@ -58,7 +58,7 @@ df[~df["name"].str.contains("|".join(CVD_drug_list), case = False)]
 
 ```python 
 age_list = []
-for file in os.listdir(qc):
+for file in os.listdir(qc, encoding = "latin-1"):
     print(file)
     df = pd.read_csv(qc + "/"+ file)
     age_list = df["minimum_age"].tolist() + df["maximum_age"].tolist()
@@ -142,3 +142,73 @@ manual_keys = ["clin_spec_A", "clin_spec_B", "clin_spec_C"]
 alt_dict = {manual_keys[i]:manual_value[i] for i in range(len(manual_keys))}
 speciality_dict = {key: specialty_dict[key] + alt_dict[key] if key in alt_dict.keys() else value for key, value in specialty_dict.items()}
 ```
+
+## Identifying exclusion by characteristic by RCT by drug category 
+
+```python
+for file in os.listdir(qc):
+    print(file)
+    df = pd.read_csv(qc + "/"+ file, encoding = "latin-1")
+
+    # identifying exclusion criteria from the eligibility criteria string
+    for row, index in enumerate(df.itertuples()):
+        criteria = df.iloc[row,9]
+        exclusion = criteria.find("Exclusion")
+        if exclusion != -1:
+            exclusion_criteria = criteria[exclusion:]
+            exclusion_criteria = exclusion_criteria.replace("\n", "").rstrip()
+            df.iloc[row,14] = exclusion_criteria
+        else:
+            df.iloc[row,14] = 0 
+
+        # if phrases in the mapping dictionary match to phrases in the exclusion criteria, then this clinical speciality is excluded from the RCT
+        if df.iloc[row,14] != 0:
+            for k, v in speciality_dict.items():
+                if k == "Angiology": 
+                    for item in v:
+                        if re.search(item,criteria_amended,flags=re.IGNORECASE:
+                            df.iloc[row,15] = 1
+
+            # repeat for remaining clinical specialities
+            ...
+
+        # identifying age exclusion 
+        min_age = str(df.iloc[row,11])
+        max_age = str(df.iloc[row,12])
+
+        if min_age != 'nan' and int(float(min_age)) >= 18:
+            df.iloc[row, 54] = 1
+        if max_age != 'nan' and int(float(max_age)) <= 60:
+            df.iloc[row, 55] = 1
+        if max_age != 'nan' and int(float(max_age)) <= 70:
+            df.iloc[row, 56] = 1
+        if max_age != 'nan' and int(float(max_age)) <= 80:
+            df.iloc[row, 57] = 1
+
+        # identifying early and late phase trials 
+        if str(df.iloc[row,6]) in ['24','25','30','31']:
+            df.iloc[row,64] = 1
+        elif str(df.iloc[row,6]) in ['27','28','29']:
+            df.iloc[row,65] = 1
+
+        # identifying gender exclusion 
+        if str(df.iloc[row,10]) == str('13'):
+            df.iloc[row,68] = 1 
+        elif str(df.iloc[row,10]) == str('12'):
+            df.iloc[row,67] = 1 
+        elif str(df.iloc[row,10]) == str('14'):
+            df.iloc[row,66] = 1 
+    
+    # generate total counts for each characteristics by drug category 
+    df.iloc[-1].sum(numeric_only = True) 
+    df.to_csv(processed + "/"+ file, index = False)
+```
+
+## Output 
+
+The output file is a csv file with raw counts of exclusion by characteristic by drug category. These raw counts are then used to calculate proportions based on the total number of RCTs per drug category.
+
+|  | ... | medication_use | cardiovascular clinical speciality | ... |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| RCT 1 |  | 1 | 0 |  |  
+| Count |  | 1 | 0 |  |  
