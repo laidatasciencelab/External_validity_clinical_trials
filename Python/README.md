@@ -61,7 +61,7 @@ age_list = []
 for file in os.listdir(qc, encoding = "latin-1"):
     print(file)
     df = pd.read_csv(qc + "/"+ file)
-    age_list = df["minimum_age"].tolist() + df["maximum_age"].tolist()
+    age_list = age_list + df["minimum_age"].tolist() + df["maximum_age"].tolist()
 
 age_list = list(set(age_list))
 age_list = [str(x) for x in age_list]
