@@ -9,21 +9,19 @@ R version 3.6.2
  2) CPRD diagnoses file with record of diagnoses for each patid
  3) CPRD prescription file with record of prescription for each patid 
 
- ## Importing packages 
+## Importing packages 
 
- ## Creating clinical speciality binary file 
+## Creating clinical speciality binary file 
 
- ## Creating prescription binary file 
+## Creating prescription binary file 
 
- ## Creating drug category cohorts (incl. index age, no. of cs, no. of pres)
+## Creating drug category cohorts (incl. index age, no. of cs, no. of pres)
 
- ## Calculating prevalence numbers 
+## Calculating prevalence numbers 
 
- ## Calculating mm and pp numbers 
+## Calculating mm and pp numbers 
 
- ## Output files and tables 
+## Output files and tables 
 
- ## Calculating confidence intervals for proportions 
 
- ## Plotting figures 
 
