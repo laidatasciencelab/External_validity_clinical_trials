@@ -1,4 +1,4 @@
-# Identifying and quantifying prevalence of each characteristic (clinical speciality, medication use, age etc.) for RCTs in each drug category
+# Identifying and quantifying prevalence of each characteristic (clinical speciality, medication use, age etc.) for individuals in each drug category cohort
 
 The objective of the following code is to 1) create the different drug category cohorts and 2) to calculate the overall prevalence count of each characteristic for all individuals in the each drug category cohort.
 
