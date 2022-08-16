@@ -358,6 +358,7 @@ CVD_merged = CVD_merged[!CVD_merged$qc==1]
 
 # total 
 nrow(CVD_merged) 
+CVD_cohort = CVD_merged
 # total 2,462,852 for CVD cohort
 
 # ... repeat for 12 remaining drug category cohorts
@@ -371,6 +372,71 @@ nrow(CVD_merged)
 ## Calculating counts of concomitant clinical specialties and prescriptions per patid per drug category cohort
 
 ```R
+# example with CVD drug category cohort 
+# calculating counts of concomitant prescriptions per patid 
+df_cohort = list(CVD_cohort)
+df_processed = lapply(
+    df_cohort,
+    function(df){
+        merged_df = merge(df, pres_merged, by = "patid", all.x = TRUE)
+        merged_df = merged_df[c(2:135)]
+        foo = function(x){
+        date = merged_df$prescription_index_date + 1
+        merged_df$x <- difftime(date , x , units = "days")
+        }
+        merged_df = sapply(merged_df, foo)
+        # ensures prescription does not precede index prescription and the concomitant prescription is given within a year of the index prescription
+        merged_df[merged_df < 0 | is.na(merged_df) | merged_df > 365] <- 0
+        merged_df[merged_df > 0] <- 1
+        df$pres_quantity = rowSums(merged_df)
+        return(df)
+  }
+)
+
+CVD_cohort = as.data.frame(df_processed[1])
+
+# calculating counts of concomitant clinical speciality per patid 
+c = 1:ncol(clin_spec)
+clin_spec = clin_spec[,c%%2==1, with = FALSE]
+
+df_cohort = list(CVD_cohort)
+df_processed = lapply(
+  df_cohort,
+  function(df){
+    merged_df = merge(df, clin_spec, by = "patid", all.x = TRUE)
+    merged_df = merged_df[c(2,4:31)]
+    foo = function(x){
+      date = merged_df$prescription_index_date + 1
+      merged_df$x <- difftime(date, x, units = "days")
+    }
+    merged_df = sapply(merged_df, foo)
+    # ensures diagnoses does not precede index prescription
+    merged_df[merged_df < 0 | is.na(merged_df)] <- 0
+    merged_df[merged_df > 0] <- 1
+    df$clin_spec_quantity = rowSums(merged_df)
+    return(df)
+  }
+)
+
+CVD_cohort = as.data.frame(df_processed[1])
+
+# removing a count of 2 from pres_quantity to account for 1x prescription index date and 1x actual index date in df
+
+# removing a count of 1 from clin_spec_quantity to account for 1x prescription index date in df
+
+df_cohort = list(CVD_cohort)
+df_processed = lapply(
+  df_cohort,
+  function(df){
+    df$pres_quantity = df$pres_quantity - 2
+    df$clin_spec_quantity = df$clin_spec_quantity - 1
+    return(df)
+  }
+)
+
+CVD_cohort = as.data.frame(df_processed[1])
+
+# ... repeat for 12 remaining drug category cohorts
 ```
 
 ## Calculating counts by clinical speciality per drug category cohort for prevalence calculations
