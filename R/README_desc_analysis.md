@@ -481,7 +481,48 @@ CVD_prev_count = as.data.frame(prev_count[1])
 ## Calculating summary counts of concomitant clinical specialties and prescriptions per drug category cohort binned by age groups
 
 ```R
+cohort_list = list(GI_cohort,CVD_cohort,RESP_cohort,CNS_cohort,INFE_cohort,ENDO_cohort,OBSGYUT_cohort,ONCOIMMU_cohort,NUT_cohort,MUSC_cohort,OPHT_cohort,ENT_cohort,DERM_cohort)
+
+clin_spec_bins = lapply(
+  cohort_list,
+  function(df){
+    bin = df[c("patid","gender","prescription_index_age","clin_spec_quantity")]
+    bin_A1 = bin[which(bin$prescription_index_age < 18), ]
+    bin_A2 = bin[which(bin$prescription_index_age < 30 & bin$prescription_index_age >= 18), ]
+    bin_A3 = bin[which(bin$prescription_index_age < 40 & bin$prescription_index_age >= 30), ]
+    bin_A4 = bin[which(bin$prescription_index_age < 50 & bin$prescription_index_age >= 40), ]
+    bin_A5 = bin[which(bin$prescription_index_age < 60 & bin$prescription_index_age >= 50), ]
+    bin_A6 = bin[which(bin$prescription_index_age < 70 & bin$prescription_index_age >= 60), ]
+    bin_A7 = bin[which(bin$prescription_index_age < 80 & bin$prescription_index_age >= 70), ]
+    bin_A8 = bin[which(bin$prescription_index_age >= 80), ]
+    
+    clinspec_count_A0 = bin %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A1 = bin_A1 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A2 = bin_A2 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A3 = bin_A3 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A4 = bin_A4 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A5 = bin_A5 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A6 = bin_A6 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A7 = bin_A7 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    clinspec_count_A8 = bin_A8 %>% group_by(clin_spec_quantity) %>% summarise(n=n())
+    
+    df_list = list(clinspec_count_A0,clinspec_count_A1,clinspec_count_A2,clinspec_count_A3,clinspec_count_A4,clinspec_count_A5,clinspec_count_A6,clinspec_count_A7,clinspec_count_A8)
+    output = df_list %>% reduce(full_join, by='clin_spec_quantity')
+    return(output)
+  }
+)
+
+write.xlsx(clin_spec_bins, "clin_spec_bins.xlsx")
 ```
+### Output per page
+
+| clin_spec_quantity | clinspec_count_A0 | clinspec_count_A1 | ... | ... | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+| 0 | ... | ... |  |  |  |
+| 1 | ... | ... |  |  |  |
+| 2 | ... | ... |  |  |  |
+| ... | ... | ... |  |  |  |
+
 
 ## Calculating top 10 conditions and prescriptions for internal analysis of anomalies per drug category cohort binned by age groups 
 
