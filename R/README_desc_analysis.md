@@ -439,10 +439,44 @@ CVD_cohort = as.data.frame(df_processed[1])
 # ... repeat for 12 remaining drug category cohorts
 ```
 
+### Output
+
+| patid | dob | ... | pres_quantity | clin_spec_quantity | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+|  |  |  |  |  |  |
+
 ## Calculating counts by clinical speciality per drug category cohort for prevalence calculations
 
 ```R
+# example with CVD drug category cohort 
+
+df_cohort = list(CVD_cohort)
+prev_count = lapply(
+  df_cohort,
+  function(df){
+    merged_df = merge(df, clin_spec, by = "patid", all.x = TRUE)
+    merged_df = merged_df[, c(2:30)]
+    foo = function(x){
+      date = merged_df$prescription_index_date + 1
+      merged_df$x = difftime(date,x,units="days")
+    }
+    merged_df = sapply(merged_df, foo)
+    # ensures diagnoses does not precede index prescription
+    merged_df[merged_df < 0 | is.na(merged_df)] <- 0
+    merged_df[merged_df > 0] <- 1
+    output = colSums(merged_df)
+    return(output)
+  }
+)
+
+CVD_prev_count = as.data.frame(prev_count[1])
 ```
+
+### Output
+
+| drug category cohort | clin_spec 1 count | clin_spec 2 count | ... | ... | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+| CVD | ... | ... |  |  |  |
 
 ## Calculating summary counts of concomitant clinical specialties and prescriptions per drug category cohort binned by age groups
 
