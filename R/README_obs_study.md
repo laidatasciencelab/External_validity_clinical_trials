@@ -6,8 +6,44 @@ R version 3.6.2
 
 ## Input files
  1) CPRD cohort file
+
+Master cohort file of patient IDs with patient variables (examples given) with the following template:
+
+| patid | dob | entry date | V3 | V4 | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+|  |  |  |  |  |  |
+
  2) CPRD diagnoses file with record of diagnoses for each patid
+
+Diagnoses file of patient IDs with diagnoses and dates with the following template:
+
+| patid | diagnosis 1 | date 1 | diagnosis 2 | date 2 | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+|  |  |  |  |  |  |
+
  3) CPRD prescription file with record of prescription for each patid 
+
+ Prescription file where each prescription phenotype is a list of patient IDs with diagnoses and dates with the following template:
+
+| patid | prescription 1 | date 1 | prescription 2 | date 2 | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+|  |  |  |  |  |  |
+
+4) Clinical speciality binary file 
+
+Clincal speciality file with the following template: 
+
+| patid | clinical speciality 1 | date 1 | clinical speciality 2 | date 2 | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+|  |  |  |  |  |  |
+
+5) Prescription binary file 
+
+Prescription file with the following template: 
+
+| patid | prescription phenotype 1 | date 1 | prescription phenotype 2 | date 2 | ... | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
+|  |  |  |  |  |  |
 
 ## Importing packages 
 
