@@ -281,7 +281,7 @@ pres_merged = merge(x = pres_merged, y = GP1, by = "patid", all.x = TRUE)
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
 |  |  |  |  |  |  |
 
-## Creating drug category cohorts (incl. index age, no. of cs, no. of pres)
+## Creating base drug category cohorts 
 
 ```R
 # example with CVD drug category cohort 
@@ -368,11 +368,24 @@ nrow(CVD_merged)
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
 |  |  |  |  |  |  |
 
-## Calculating prevalence numbers 
+## Calculating counts of concomitant clinical specialties and prescriptions per patid per drug category cohort
 
-## Calculating mm and pp numbers 
+```R
+```
 
-## Output files and tables 
+## Calculating counts by clinical speciality per drug category cohort for prevalence calculations
 
+```R
+```
+
+## Calculating summary counts of concomitant clinical specialties and prescriptions per drug category cohort binned by age groups
+
+```R
+```
+
+## Calculating top 10 conditions and prescriptions for internal analysis of anomalies per drug category cohort binned by age groups 
+
+```R
+```
 
 
