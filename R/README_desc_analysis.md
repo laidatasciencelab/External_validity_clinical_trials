@@ -236,8 +236,8 @@ GP1 = GP1[,c%%2==0]
 tempp = do.call(pmin, c(GP1, list(na.rm = TRUE)))
 GP1$prescription_index_date = tempp
 GP1$patid = rownames(GP1)
-GP1 <- GP1[tail(names(GP1),2)]
-GP1 <- GP1[,c(2,1)]
+GP1 = GP1[tail(names(GP1),2)]
+GP1 = GP1[,c(2,1)]
 names(GP1)[2] = "GP1_processed"
 
 # merge back into main prescription df
