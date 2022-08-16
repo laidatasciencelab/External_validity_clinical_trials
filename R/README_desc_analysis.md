@@ -568,16 +568,3 @@ write.xlsx(pres_bins, "pres_bins.xlsx")
 | 1 | ... | ... |  |  |  |
 | 2 | ... | ... |  |  |  |
 | ... | ... | ... |  |  |  |
-
-
-## Calculating top 10 conditions and prescriptions for internal analysis of anomalies per drug category cohort binned by age groups 
-
-```R
-cohort_list = list(GI_cohort,CVD_cohort,RESP_cohort,CNS_cohort,INFE_cohort,ENDO_cohort,OBSGYUT_cohort,ONCOIMMU_cohort,NUT_cohort,MUSC_cohort,OPHT_cohort,ENT_cohort,DERM_cohort)
-
-
-
-
-```
-
-
