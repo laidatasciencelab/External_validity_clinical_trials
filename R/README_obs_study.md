@@ -269,14 +269,65 @@ table4<- CreateTableOne(vars = c('clinspec_total','pres_total','prac_region','ge
                         factorVars = c('gender','prac_region'),
                         strata = 'Before_index_status_CARD')
 
+# baseline characteristics of cohort 
+myvars = c("age_index", "prac_region","gender", "clinspec_total", "pres_total")
+catvars = c("prac_region","gender","clinspec_total", "pres_total")
+baseline_table = CreateTableOne(vars = myvars, data = dcm.matched, factorVars = catvars)
+summary(baseline_table)
+baseline_output = print(baseline_table)
+
 # matched cohort 
 dcm.matched = match.data(match.it)[1:ncol(dcmfp)]
 ```
 
-
 ## Cox regression analysis 
+```R
+# basic plot of KM graph 
+km_fit_strata = survfit(Surv(os_yrs,dead)~Before_index_status_CARD, data=dcm.matched)
+plot(km_fit_strata,xlabs="years", main="KM plot")
 
-## Output files and tables 
+# survminer theme 
+custom_theme <- function() {
+  theme_survminer() %+replace%
+    theme(
+      plot.title = element_text(hjust=0.5, face="bold")
+    )
+}
+
+# ggplot of KM graph 
+fit = survfit(Surv(os_yrs,dead) ~ Before_index_status_CARD, data=dcm.matched)
+summary(fit)
+
+ggsurvplot(
+  fit = survfit(Surv(os_yrs,dead) ~ Before_index_status_CARD, data=dcm.matched),
+  conf.int = TRUE, 
+  pval = TRUE,
+  fun = "pct",
+  title = "Cardiovascular conditions",
+  ggtheme=custom_theme(),
+  xlab = "Time (years)",
+  ylab = "Survival probability",
+  break.time.by = 1,
+  risk.table = TRUE,
+  risk.table.col = "Before_index_status_CARD",
+  fontsize = 3,
+  risk.table.height = 0.25,
+  legend.labs = c("Only indications", "With contraindications"),
+  palette = c('#BC3C29FF','#0072B5FF')
+)
+
+# Cox regression 
+surv_object = Surv(time = dcm.matched$os_yrs, event = dcm.matched$dead)
+fit.coxph <- coxph(surv_object ~ Before_index_status_CARD+clinspec_total+pres_total+as.factor(prac_region)+gender+age_index, data=dcm.matched)
+summary(fit.coxph)
+ggforest(fit.coxph, data=dcm.matched)
+
+# testing for proportional hazards assumptions 
+fit.coxph_prop = cox.zph(fit.coxph, transform = "rank")
+fit.coxph_prop
+ggcoxzph(fit.coxph_prop, font.main =10, font.x=8, font.y = 8)
+```
+
 
 
 
