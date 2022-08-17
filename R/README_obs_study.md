@@ -193,7 +193,34 @@ dcmf_ready = dcmf_ready[which(dcmf_ready$qc=='0'), ]
 
 ## Calculating prevalence numbers 
 
-## Calculating mm and pp numbers 
+```R
+dcmfr = dcmf_ready[c(1:2)]
+dcmfr = merge(dcmfr, clin_spec, by = "patid", all.x = TRUE)
+c = 1:ncol(dcmf)
+dcmftemp = dcmfr[,c%%2==0]
+foo = function(x){
+  date = dcmftemp$AD_prescription_date + 1
+  dcmftemp$x <- difftime(date,x,units="days")
+}
+dcmftemp <- sapply(dcmftemp, foo)
+dcmftemp = data.frame(dcmftemp)
+
+# ensure that diagnosis date precedes index prescription date 
+dcmftemp[dcmftemp < 0 | is.na(dcmftemp)] <- 0
+dcmftemp[dcmftemp > 0] <- 1
+dcmftemp$AD_prescription_date =NULL
+
+output = colSums(dcmftemp)
+output$condition = colnames(dcmftemp)
+output = data.frame(output)
+```
+
+## Pre-matching wrangling
+```R
+
+
+
+```
 
 ## Propensity score matching 
 
