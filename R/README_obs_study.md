@@ -278,6 +278,8 @@ baseline_output = print(baseline_table)
 
 # matched cohort 
 dcm.matched = match.data(match.it)[1:ncol(dcmfp)]
+
+# repeat for other conditions (e.g. single psychiatric conditions) to form matched cohorts from the base dementia cohort
 ```
 
 ## Cox regression analysis 
