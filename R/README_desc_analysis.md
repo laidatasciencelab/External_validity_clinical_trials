@@ -385,7 +385,7 @@ df_processed = lapply(
         merged_df$x <- difftime(date , x , units = "days")
         }
         merged_df = sapply(merged_df, foo)
-        # ensures prescription does not precede index prescription and the concomitant prescription is given within a year of the index prescription
+        # ensures prescription does not occur after index prescription and the concomitant prescription is given within a year prior to the index prescription
         merged_df[merged_df < 0 | is.na(merged_df) | merged_df > 365] <- 0
         merged_df[merged_df > 0] <- 1
         df$pres_quantity = rowSums(merged_df)
@@ -410,7 +410,7 @@ df_processed = lapply(
       merged_df$x <- difftime(date, x, units = "days")
     }
     merged_df = sapply(merged_df, foo)
-    # ensures diagnoses does not precede index prescription
+    # ensures diagnoses does not occur after index prescription
     merged_df[merged_df < 0 | is.na(merged_df)] <- 0
     merged_df[merged_df > 0] <- 1
     df$clin_spec_quantity = rowSums(merged_df)
@@ -461,7 +461,7 @@ prev_count = lapply(
       merged_df$x = difftime(date,x,units="days")
     }
     merged_df = sapply(merged_df, foo)
-    # ensures diagnoses does not precede index prescription
+    # ensures diagnoses does not occur after index prescription
     merged_df[merged_df < 0 | is.na(merged_df)] <- 0
     merged_df[merged_df > 0] <- 1
     output = colSums(merged_df)
