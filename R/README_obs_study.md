@@ -188,7 +188,6 @@ dcmf_ready = dcmf_ready[c(1:8,10:15,17)]
 dcmf_ready$qc = difftime(dcmf_ready$date_exit,dcmf_ready$AD_prescription_date,units="days")
 dcmf_ready$qc <- ifelse(dcmf_ready$qc<0,1,0)
 dcmf_ready = dcmf_ready[which(dcmf_ready$qc=='0'), ]
-
 ```
 
 ## Calculating prevalence numbers 
@@ -217,12 +216,63 @@ output = data.frame(output)
 
 ## Pre-matching wrangling
 ```R
+# age at prescription
+dcmf_ready$age_index = interval(start = dcmf_ready$dob, end = dcmf_ready$AD_prescription_date)/duration(n = 1, unit = "years")
 
+# survival years 
+dcmf_ready$os_yrs = interval(start = dcmf_ready$AD_prescription_date, end = dcmf_ready$date_exit)/duration(n = 1, unit = "years")
 
+# limit follow up to 1-10 years 
+dcmf_ready$dead = ifelse(dcmf_ready$os_yrs > 10, 0, dcmf_ready$dead)
+dcmf_ready$os_yrs = ifelse(dcmf_ready$os_yrs > 10, 10, dcmf_ready$os_yrs)
+dcmf_ready$followup = difftime(dcmf_ready$date_exit,dcmf_ready$AD_prescription_date,units="days")
+dcmf_ready$followup = as.numeric(dcmf_ready$followup)
+dcmf_ready$followup = ifelse(dcmf_ready$followup < 365 & dcmf_ready$dead == "0", 0, 1)
+dcmf_ready = dcmf_ready[which(dcmf_ready$followup == "1"), ]
+dcmf_ready$followup = NULL
 
+# median follow up time 
+dcm.exposed = dcm.matched[which(dcm.matched$Before_index_status_CARD=="1"), ]
+dcm.control = dcm.matched[which(dcm.matched$Before_index_status_CARD=="0"), ]
+quantile(prodlim(Hist(time=os_yrs,event=dead)~1, 
+                 data = dcm.exposed, reverse=TRUE))
+quantile(prodlim(Hist(time=os_yrs,event=dead)~1, 
+                 data = dcm.control, reverse=TRUE))
 ```
 
 ## Propensity score matching 
+```R
+# selecting necessary columns 
+dcmfp <- dcmf_ready[c(1,4,6:10,14,17:18)]
+
+# baseline characteristics table 
+table1<- CreateTableOne(vars = c('clinspec_total','pres_total','prac_region','gender','age_index'),
+                        data = dcmfp,
+                        factorVars = c('gender','prac_region'),
+                        strata = 'Before_index_status_CARD')
+
+# propensity score matching 
+set.seed(8989)
+dcmfp$group <- as.logical(dcmfp$Before_index_status_CARD == "1")
+match.it <-matchit(group ~ clinspec_total+pres_total+prac_region+gender+age_index,data=dcmfp,method="nearest",ratio=1,link="logit",caliper= c(.2),std.caliper=TRUE)
+
+matched = summary(match.it)
+matched
+matched$sum.matched
+
+# propensity score distribution 
+plot(match.it, type='jitter', interactive=FALSE)
+
+# baseline characteristics table after matching
+table4<- CreateTableOne(vars = c('clinspec_total','pres_total','prac_region','gender','age_index'),
+                        data = dcm.matched,
+                        factorVars = c('gender','prac_region'),
+                        strata = 'Before_index_status_CARD')
+
+# matched cohort 
+dcm.matched = match.data(match.it)[1:ncol(dcmfp)]
+```
+
 
 ## Cox regression analysis 
 
