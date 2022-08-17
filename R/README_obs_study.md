@@ -65,11 +65,17 @@ library(prodlim)
 ## Creating observational study cohort
 
 ```R
+# load in cohort file
+cohort_full = readRDS("cohort_full.rds")
+
 # load in prescription binary file 
 pres_merged = readRDS("prescription_binary.rds")
 
 # load in cprd diagnoses file 
 cprd_diagnoses = readRDS("cprd_diagnoses.rds")
+
+# load in clinical speciality binary file
+clin_spec = readRDS("clin_spec_binary.rds")
 
 # date-only version of cprd diagnoses file 
 c = 1:ncol(cprd_diagnoses)
@@ -139,7 +145,51 @@ dcmf = dcmf[which(dcmf$Before_index_status_CARD == '1' | dcmf$Before_index_statu
 ```
 ## Calculating counts of concomitant clinical specialties and prescriptions per patid 
 
+```R
+# calculating counts of concomitant clinical speciality per patid 
+dcmfmm = merge(x = dcmf, y = clin_spec, by = "patid", all.x = TRUE)
+dcmfmm = dcmfmm[c(2,7:62)]
+c = 1:ncol(dcmfmm)
+dcmfmmtemp = dcmfmm[,c%%2==1]
+foo = function(x){
+  date = dcmfmmtemp$AD_prescription_date + 1
+  dcmfmmtemp$x <- difftime(date, x, units = "days")
+}
+dcmfmmtemp <- sapply(dcmfmmtemp, foo)
+dcmfmmtemp = data.frame(dcmfmmtemp)
 
+# ensure that diagnosis date precedes index prescription date
+dcmfmmtemp[dcmfmmtemp < 0 | is.na(dcmfmmtemp)] <- 0
+dcmfmmtemp[dcmfmmtemp > 0] <- 1
+dcmfmmtemp$AD_prescription_date =NULL
+dcmf$clinspec_total = rowSums(dcmfmmtemp)
+
+# calculating counts of concomitant prescriptions per patid 
+dcmfpp = merge(x = dcmf, y = pres_merged, by = "patid", all.x = TRUE)
+dcmfpp = dcmfpp[c(2,8:57,59:140)]
+foo = function(x){
+  date = dcmfpp$AD_prescription_date+1
+  dcmfpp$x <- difftime(date,x,units="days")
+}
+dcmfpp <- sapply(dcmfpp, foo)
+dcmfpp = data.frame(dcmfpp)
+
+# ensure that prescription date precedes index prescription date
+dcmfpp[dcmfpp < 0 | is.na(dcmfpp) | dcmfpp > 365] <- 0
+dcmfpp[dcmfpp > 0] <- 1
+dcmfpp$AD_prescription_date =NULL
+dcmf$pres_total = rowSums(dcmfpp)
+
+# merge with cohort_full 
+dcmf_ready = merge(x = dcmf,y = cohort_full,by="patid",all.x=TRUE)
+dcmf_ready = dcmf_ready[c(1:8,10:15,17)]
+
+# qc to ensure exit date does not precede analysis period 
+dcmf_ready$qc = difftime(dcmf_ready$date_exit,dcmf_ready$AD_prescription_date,units="days")
+dcmf_ready$qc <- ifelse(dcmf_ready$qc<0,1,0)
+dcmf_ready = dcmf_ready[which(dcmf_ready$qc=='0'), ]
+
+```
 
 ## Calculating prevalence numbers 
 
