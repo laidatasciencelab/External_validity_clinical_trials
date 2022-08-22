@@ -25,6 +25,10 @@ Example template per sheet:
 
 Numerical heatmap proportions and prevalence tables
 
+## Outputs
+
+Outputs can be found in the Figures
+
 ## Importing packages 
 ```R
 library(purrr)

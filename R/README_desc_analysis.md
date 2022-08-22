@@ -570,3 +570,4 @@ write.xlsx(pres_bins, "pres_bins.xlsx")
 | ... | ... | ... |  |  |  |
 
 The above raw count outputs are used to calculate proportions and prevalence for the descriptive analyses. 
+

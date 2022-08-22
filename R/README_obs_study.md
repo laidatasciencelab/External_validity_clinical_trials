@@ -330,6 +330,3 @@ fit.coxph_prop
 ggcoxzph(fit.coxph_prop, font.main =10, font.x=8, font.y = 8)
 ```
 
-
-
-
