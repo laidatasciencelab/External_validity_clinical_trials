@@ -436,7 +436,7 @@ df_processed = lapply(
 
 CVD_cohort = as.data.frame(df_processed[1])
 
-# ... repeat for 12 remaining drug category cohorts
+# ... repeat for 11 remaining drug category cohorts
 ```
 
 ### Output
