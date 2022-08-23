@@ -1,4 +1,4 @@
-# Comparing clinical trial population representativeness to real-world populations: an external validity analysis encompassing 43,895 trials and 5.6M individuals across 989 unique drugs and 286 conditions
+# Comparing clinical trial population representativeness to real-world populations: an external validity analysis encompassing 43,895 trials and 5.6M individuals across 989 unique drugs and 286 conditions 
 
 ## How to cite this work
 > Tan YY, Papez V, Chang WH, Mueller SH, Denaxas S, Lai AG. "Comparing clinical trial population representativeness to real-world populations: an external validity analysis encompassing 43,895 trials and 5.6M individuals across 989 unique drugs and 286 conditions." Lancet Healthy Longevity *insert vol*.*insert issue* *(insert year)*. *insert doi*
@@ -13,6 +13,6 @@ We extracted RCTs from clinicaltrials.gov from its inception to 28/04/2021 and p
 
 Quantification of RCT exclusion was undertaken in Python 3.8.10, and quantification of prevalence and further analyses were undertaken in R 3.6.2.
 
-## Ethical approval 
+## Ethics approval 
 
 Information governance approval was obtained from the Medicines Healthcare Regulatory Authority (UK) Independent Scientific Advisory Committee (20_000204) Clinical Practice Research Datalink (CPRD). 
